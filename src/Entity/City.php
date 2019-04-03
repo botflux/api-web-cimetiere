@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use \DateTime;
+
 class City implements APIEntityInterface
 {
     private $id;
@@ -202,7 +204,7 @@ class City implements APIEntityInterface
     /**
      * Get the value of createdAt
      */ 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -212,7 +214,7 @@ class City implements APIEntityInterface
      *
      * @return  self
      */ 
-    public function setCreatedAt($createdAt) : self
+    public function setCreatedAt(DateTime $createdAt) : self
     {
         $this->createdAt = $createdAt;
 
@@ -222,7 +224,7 @@ class City implements APIEntityInterface
     /**
      * Get the value of connectedAt
      */ 
-    public function getConnectedAt()
+    public function getConnectedAt(): DateTime
     {
         return $this->connectedAt;
     }
@@ -232,7 +234,7 @@ class City implements APIEntityInterface
      *
      * @return  self
      */ 
-    public function setConnectedAt($connectedAt) : self
+    public function setConnectedAt(DateTime $connectedAt) : self
     {
         $this->connectedAt = $connectedAt;
 
@@ -362,7 +364,7 @@ class City implements APIEntityInterface
     /**
      * Get the value of modifiedAt
      */ 
-    public function getModifiedAt()
+    public function getModifiedAt() : DateTime
     {
         return $this->modifiedAt;
     }
@@ -372,7 +374,7 @@ class City implements APIEntityInterface
      *
      * @return  self
      */ 
-    public function setModifiedAt($modifiedAt) : self
+    public function setModifiedAt(DateTime $modifiedAt) : self
     {
         $this->modifiedAt = $modifiedAt;
 

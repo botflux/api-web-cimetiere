@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class City implements IAPIEntity
+class City implements APIEntityInterface
 {
     private $id;
     private $name;

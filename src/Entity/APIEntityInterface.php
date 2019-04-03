@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-interface IAPIEntity
+interface APIEntityInterface
 {
     function toAPI ();
 }

@@ -48,3 +48,8 @@ $container['city-dao'] = function ($c) {
     return $dao;
 };
 
+$container['city-helper'] = function ($c) {
+    $helper = new CityHelper();
+
+    return $helper;
+};

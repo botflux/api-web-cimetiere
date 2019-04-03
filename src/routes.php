@@ -7,6 +7,9 @@ use Slim\Http\Response;
 
 $app->get('/cities', function (Request $request, Response $response, array $args) {
     $cities = $this->get('city-dao')->findAll();
+    $citiesArray = $this->get('city-helper')->convertCollectionToAPI($cities);
+
+    return $response->withJson($citiesArray);
 });
 
 /* 

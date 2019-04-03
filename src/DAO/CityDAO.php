@@ -4,6 +4,8 @@ namespace App\DAO;
 
 use \PDO;
 use \App\Entity\City;
+use \DateTime;
+use \Date;
 
 class CityDAO extends DAO 
 {
@@ -43,9 +45,9 @@ class CityDAO extends DAO
             ->setEmail($row['email'])
             ->setPassword($row['password'])
             ->setConcessions($row['concessions'])
-            ->setCreatedAt($row['creation'])
-            ->setModifiedAt($row['modification'])
-            ->setConnectedAt($row['connexion'])
+            ->setCreatedAt(new DateTime($row['creation']))
+            ->setModifiedAt(new DateTime($row['modification']))
+            ->setConnectedAt(new DateTime($row['connexion']))
             ->setHidden($row['hidden'])
             ->setCanBloom($row['interne_fleurir'])
             ->setCanMaintain($row['interne_entretenir'])

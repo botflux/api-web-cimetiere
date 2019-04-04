@@ -6,7 +6,11 @@ use Slim\Http\Response;
 // Routes
 
 $app->get('/cities', function (Request $request, Response $response, array $args) {
-    $cities = $this->get('city-dao')->findAll();
+    $cities = $this->get('city-dao')->findAll(
+        $request->getParams(),
+        ($request->getParam('first') && ctype_digit($request->getParam('first')) && intval($request->getParam('first')) >= 0 ? intval($request->getParam('first')) : 0),
+        ($request->getParam('count') && ctype_digit($request->getParam('count')) && intval($request->getParam('count')) >= 1 ? intval($request->getParam('count')) : 25)
+    );
     $citiesArray = $this->get('city-helper')->convertCollectionToAPI($cities);
 
     return $response->withJson($citiesArray);

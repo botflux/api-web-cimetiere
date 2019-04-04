@@ -10,16 +10,49 @@ use \Date;
 class CityDAO extends DAO 
 {
     public const TABLE_NAME = 'commune';
+    private const VALID_PARAMS = [
+        'name' => 'nom',
+        'county' => 'departement'
+    ];
 
     public function __construct(PDO $connection)
     {
         parent::__construct($connection);
     }
 
-    public function findAll () : array
+    public function findAll (array $whereOptions = [], $first = 0, $count = 25) : array
     {
-        $statement = $this->getConnection()->prepare("SELECT * FROM commune");
+        $request = 'SELECT * FROM commune';
+
+
+        $where = '';
+        foreach ($whereOptions as $optionName => $v) {
+            if (!isset(self::VALID_PARAMS[$optionName]))
+                continue;
+            
+            $where .= empty($where) ? 'WHERE ' : ' AND ';
+            $where .= sprintf('%s = :%s', self::VALID_PARAMS[$optionName], $optionName);
+        }
+
+        $request .= " $where";
+
+        if (!\is_integer($first) || \intval($first) < 0) $first = 0;
+        if (!\is_integer($count) || \intval($count) < 1) $count = 1;
+
+        $request .= ' LIMIT :first,:count';
+
+        $statement = $this->getConnection()->prepare($request);
         
+        $statement->bindParam('first', $first, \PDO::PARAM_INT);
+        $statement->bindParam('count', $count, \PDO::PARAM_INT);
+        
+        foreach ($whereOptions as $optionName => $v) {
+            if (!isset(self::VALID_PARAMS[$optionName]))
+                continue;
+            
+            $statement->bindParam($optionName, $whereOptions[$optionName]);
+        }
+
         if ($statement->execute()) {
             $citiesRows = $statement->fetchAll(PDO::FETCH_ASSOC);
             $citiesEntities = [];

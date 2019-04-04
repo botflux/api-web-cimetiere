@@ -31,7 +31,7 @@ class CityDAO extends DAO
                 continue;
             
             $where .= empty($where) ? 'WHERE ' : ' AND ';
-            $where .= sprintf('%s = :%s', self::VALID_PARAMS[$optionName], $optionName);
+            $where .= sprintf('%s LIKE :%s', self::VALID_PARAMS[$optionName], $optionName);
         }
 
         $request .= " $where";
@@ -43,14 +43,13 @@ class CityDAO extends DAO
 
         $statement = $this->getConnection()->prepare($request);
         
-        $statement->bindParam('first', $first, \PDO::PARAM_INT);
-        $statement->bindParam('count', $count, \PDO::PARAM_INT);
+        $statement->bindParam('first', $first, PDO::PARAM_INT);
+        $statement->bindParam('count', $count, PDO::PARAM_INT);
         
         foreach ($whereOptions as $optionName => $v) {
             if (!isset(self::VALID_PARAMS[$optionName]))
                 continue;
-            
-            $statement->bindParam($optionName, $whereOptions[$optionName]);
+            $statement->bindParam(":$optionName", $v);
         }
 
         if ($statement->execute()) {

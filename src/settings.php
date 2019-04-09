@@ -1,7 +1,7 @@
 <?php
 return [
     'settings' => [
-        'displayErrorDetails' => true, // set to false in production
+        'displayErrorDetails' => getenv('ENV') === 'DEV', // set to false in production
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 
         // Renderer settings
@@ -22,9 +22,9 @@ return [
             'host' => getenv('DB_HOST'),
             'username' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
-            'args' => [
+            'args' => (getenv('ENV') === 'DEV') ? [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-            ]
+            ] : []
         ],
     ],
 ];

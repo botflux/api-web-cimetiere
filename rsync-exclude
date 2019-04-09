@@ -1,0 +1,6 @@
+vendor
+.git
+.vscode
+.idea
+*.log
+rsync-exclude

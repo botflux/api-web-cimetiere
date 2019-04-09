@@ -6,3 +6,5 @@ vendor
 rsync-exclude
 *.md
 *.env*
+*.old
+.gitignore

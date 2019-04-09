@@ -13,6 +13,20 @@ require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
+// Read env variables before including settings
+$dotenv = new Symfony\Component\Dotenv\Dotenv();
+
+if (file_exists(__DIR__ . '/../.env')) {
+    $dotenv->load(__DIR__ . '/../.env');
+}
+
+if (file_exists(__DIR__ . '/../.env.prod')) {
+    $dotenv->overload(__DIR__ . '/../.env.prod');
+}
+
+if (file_exists(__DIR__ . '/../.env.dev')) {
+    $dotenv->overload(__DIR__ . '/../.env.dev');
+}
 // Instantiate the app
 $settings = require __DIR__ . '/../src/settings.php';
 $app = new \Slim\App($settings);

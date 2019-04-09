@@ -18,10 +18,10 @@ return [
         ],
 
         'db' => [
-            'db' => getenv('WEB_CIMETIERE_BASE'),
-            'host' => getenv('WEB_CIMETIERE_SERVER'),
-            'username' => getenv('WEB_CIMETIERE_USERNAME'),
-            'password' => getenv('WEB_CIMETIERE_PASSWORD'),
+            'db' => getenv('DB_NAME'),
+            'host' => getenv('DB_HOST'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
             'args' => [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
             ]

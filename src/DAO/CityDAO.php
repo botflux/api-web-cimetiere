@@ -20,6 +20,42 @@ class CityDAO extends DAO
         parent::__construct($connection);
     }
 
+    /**
+     * Get columns count
+     *
+     * @param array $whereOptions
+     * @return 
+     */
+    public function getCount (array $whereOptions)
+    {
+        $request = 'SELECT COUNT(commune.id) as communeCount FROM commune';
+        $where = '';
+        foreach ($whereOptions as $optionsName => $v) {
+            if (!isset(self::VALID_PARAMS[$optionsName])) 
+                continue;
+
+            $where .= empty($where) ? 'WHERE ' : ' AND ';
+            $where .= \sprintf('%s LIKE :%s', self::VALID_PARAMS[$optionsName], $optionsName); 
+        }
+
+        $request .= " $where";
+
+        $statement = $this->getConnection()->prepare($request);
+        foreach ($whereOptions as $optionName => $v) {
+            if (!isset(self::VALID_PARAMS[$optionName]))
+                continue;
+            $statement->bindParam(":$optionName", $v);
+        }
+
+        if ($statement->execute()) {
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+            return intval($result['communeCount']);
+        } else {
+            throw new \Exception('Something went wrong when executing getCount.');
+        }
+
+    }
+
     public function findAll (array $whereOptions = [], $first = 0, $count = 25) : array
     {
         $request = 'SELECT * FROM commune';

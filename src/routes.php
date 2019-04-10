@@ -16,6 +16,15 @@ $app->get('/cities', function (Request $request, Response $response, array $args
     return $response->withJson($citiesArray);
 });
 
+$app->get('/cities/count', function (Request $request, Response $response, array $args) {
+    $count = $this->get('city-dao')->getCount($request->getParams());
+    return $response
+        ->withJson([
+            'count' => $count
+        ])
+    ;
+});
+
 /* 
 $app->get('/cities', function (Request $request, Response $response, array $args) {
     $cities = $this->get('city-dao')->findAll();

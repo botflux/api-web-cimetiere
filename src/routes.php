@@ -5,11 +5,13 @@ use Slim\Http\Response;
 
 // Routes
 
-$app->get('/cities', function (Request $request, Response $response, array $args) {
+$app->get('/cities', function (Request $request, Response $response, array $args) use ($app) {
+    $pageSize = $app->get('settings')['api']['default_page_size'];
+    $page = $request->getParam('page') ?? 0;
     $cities = $this->get('city-dao')->findAll(
         $request->getParams(),
-        ($request->getParam('first') && ctype_digit($request->getParam('first')) && intval($request->getParam('first')) >= 0 ? intval($request->getParam('first')) : 0),
-        ($request->getParam('count') && ctype_digit($request->getParam('count')) && intval($request->getParam('count')) >= 1 ? intval($request->getParam('count')) : 25)
+        $page * $pageSize,
+        $pageSize
     );
     $citiesArray = $this->get('city-helper')->convertCollectionToAPI($cities);
 
@@ -18,9 +20,11 @@ $app->get('/cities', function (Request $request, Response $response, array $args
 
 $app->get('/cities/count', function (Request $request, Response $response, array $args) {
     $count = $this->get('city-dao')->getCount($request->getParams());
+    $pageSize = $request->get('settings')['api']['default_page_size'];
     return $response
         ->withJson([
-            'count' => $count
+            'count' => $count,
+            'pageSize' => $pageSize
         ])
     ;
 });

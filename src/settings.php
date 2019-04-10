@@ -26,5 +26,8 @@ return [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
             ] : []
         ],
+        'api' => [
+            'default_page_size' => 10
+        ]
     ],
 ];

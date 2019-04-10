@@ -5,8 +5,8 @@ use Slim\Http\Response;
 
 // Routes
 
-$app->get('/cities', function (Request $request, Response $response, array $args) use ($app) {
-    $pageSize = $app->get('settings')['api']['default_page_size'];
+$app->get('/cities', function (Request $request, Response $response, array $args) {
+    $pageSize = $this->get('settings')['api']['default_page_size'];
     $page = $request->getParam('page') ?? 0;
     $cities = $this->get('city-dao')->findAll(
         $request->getParams(),
@@ -20,7 +20,7 @@ $app->get('/cities', function (Request $request, Response $response, array $args
 
 $app->get('/cities/count', function (Request $request, Response $response, array $args) {
     $count = $this->get('city-dao')->getCount($request->getParams());
-    $pageSize = $request->get('settings')['api']['default_page_size'];
+    $pageSize = $this->get('settings')['api']['default_page_size'];
     return $response
         ->withJson([
             'count' => $count,

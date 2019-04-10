@@ -44,6 +44,7 @@ class CityDAO extends DAO
         foreach ($whereOptions as $optionName => $v) {
             if (!isset(self::VALID_PARAMS[$optionName]))
                 continue;
+            $v = (empty($v) ? '%' : $v);
             $statement->bindParam(":$optionName", $v);
         }
 
@@ -85,6 +86,7 @@ class CityDAO extends DAO
         foreach ($whereOptions as $optionName => $v) {
             if (!isset(self::VALID_PARAMS[$optionName]))
                 continue;
+            $v = (empty($v) ? '%' : $v);
             $statement->bindParam(":$optionName", $v);
         }
 

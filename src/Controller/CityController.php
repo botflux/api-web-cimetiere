@@ -12,8 +12,7 @@ class CityController
     private $pageSize;
 
     public function __construct ($settings) {
-        $this->pageSize = $settings['api']['default_page_size'];
-        // \var_dump($settings['api']['default_page_size']);
+        $this->pageSize = intval($settings['api']['default_page_size']);
     }
 
     public function all (Request $request, Response $response, $args) {
@@ -23,7 +22,7 @@ class CityController
 
         $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
         $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
-        print($name);
+        
         $cities = City::take($pageSize)
             ->where([
                 ['nom', 'LIKE', $name],
@@ -43,15 +42,26 @@ class CityController
     public function count (Request $request, Response $response, $args) {
         $pageSize = $this->pageSize;
     
-        $count = City::all()
+        $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
+        $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
+
+        $count = City::where([
+                [ 'nom', 'LIKE', $name ],
+                [ 'departement', 'LIKE', $county ]
+            ])
             ->count()
         ;
-        
+
+        if ($count > 0)
+            $pageCount = $count / $pageSize;
+        else
+            $pageCount = 0;
+
         return $response
             ->withJson([
                 'count' => $count,
                 'pageSize' => $pageSize,
-                'pageCount' => ceil($count / $pageSize)
+                'pageCount' => $pageCount
             ])
         ;
     }

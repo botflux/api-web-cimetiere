@@ -14,7 +14,7 @@ function getCityControllerRouterName ($function) {
 }
 
 $app->get('/cities', getCityControllerRouterName('all'));
-$app->get('/cities/count', '\App\Controller\CityController:count');
+$app->get('/cities/count', getCityControllerRouterName('count'));
 
 // $app->get('/cities', function (Request $request, Response $response, array $args) {
 //     $pageSize = $this->get('settings')['api']['default_page_size'];

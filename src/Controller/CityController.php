@@ -53,7 +53,7 @@ class CityController
         ;
 
         if ($count > 0)
-            $pageCount = $count / $pageSize;
+            $pageCount = ceil($count / $pageSize);
         else
             $pageCount = 0;
 

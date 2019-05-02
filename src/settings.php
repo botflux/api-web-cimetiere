@@ -18,10 +18,14 @@ return [
         ],
 
         'db' => [
-            'db' => getenv('DB_NAME'),
+            'driver' => 'mysql',
+            'database' => getenv('DB_NAME'),
             'host' => getenv('DB_HOST'),
             'username' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
             'args' => (getenv('ENV') === 'DEV') ? [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
             ] : []

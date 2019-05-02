@@ -34,6 +34,8 @@ $app = new \Slim\App($settings);
 // Set up dependencies
 require __DIR__ . '/../src/dependencies.php';
 
+$app->getContainer()->get('db');
+
 // Register middleware
 require __DIR__ . '/../src/middleware.php';
 

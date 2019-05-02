@@ -34,22 +34,17 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
-$container['pdo'] = function ($c) {
-    $settings = $c->get('settings')['db'];
-    $pdo = new \PDO("mysql:dbname={$settings['db']};host={$settings['host']}", $settings['username'], $settings['password'], $settings['args']);
-    
-    return $pdo;
+$container['db'] = function ($c) {
+    $capsule = new \Illuminate\Database\Capsule\Manager;
+    $capsule->addConnection($c['settings']['db']);
+
+    $capsule->setAsGlobal ();
+    $capsule->bootEloquent ();
+
+    return $capsule;
 };
 
-$container['city-dao'] = function ($c) {
-    $pdo = $c->get('pdo');
-    $dao = new CityDAO($pdo);
-
-    return $dao;
-};
-
-$container['city-helper'] = function ($c) {
-    $helper = new CityHelper();
-
-    return $helper;
+$container[\App\Controller\CityController::class] = function ($c) {
+    $settings = $c->get('settings');
+    return new \App\Controller\CityController ($settings);
 };

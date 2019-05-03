@@ -23,13 +23,25 @@ class CityController
         $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
         $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
         
+        $orderBy = $request->getParam ('order-by');
+        $orderDirection = $request->getParam ('order-direction') ?? 'ASC';
+
         $wheres = [
             ['nom', 'LIKE', $name],
             ['departement', 'LIKE', $county]
         ];
 
-        $cities = City::take($pageSize)
+        $citiesRequest = City::take($pageSize)
             ->where($wheres)
+        ;
+
+        if (!empty($orderBy)) {
+            $citiesRequest = $citiesRequest
+                ->orderBy ($orderBy, $orderDirection)
+            ;
+        }
+
+        $cities = $citiesRequest
             ->skip($page * $pageSize)
             ->get()
         ;

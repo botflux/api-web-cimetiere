@@ -23,32 +23,18 @@ class CityController
         $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
         $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
         
+        $wheres = [
+            ['nom', 'LIKE', $name],
+            ['departement', 'LIKE', $county]
+        ];
+
         $cities = City::take($pageSize)
-            ->where([
-                ['nom', 'LIKE', $name],
-                ['departement', 'LIKE', $county]
-            ])
+            ->where($wheres)
             ->skip($page * $pageSize)
             ->get()
         ;
 
-        return $response
-            ->withJson([
-                'cities' => $cities
-            ])
-        ;
-    }
-
-    public function count (Request $request, Response $response, $args) {
-        $pageSize = $this->pageSize;
-    
-        $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
-        $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
-
-        $count = City::where([
-                [ 'nom', 'LIKE', $name ],
-                [ 'departement', 'LIKE', $county ]
-            ])
+        $count = City::where ($wheres)
             ->count()
         ;
 
@@ -59,6 +45,7 @@ class CityController
 
         return $response
             ->withJson([
+                'cities' => $cities,
                 'count' => $count,
                 'pageSize' => $pageSize,
                 'pageCount' => $pageCount

@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Entity\City;
 use App\Helper\StringHelper;
+use App\Form as Form;
 
 class CityController 
 {
@@ -16,14 +17,23 @@ class CityController
     }
 
     public function all (Request $request, Response $response, $args) {
-        // \var_dump($this->pageSize);
+        $pageForm = new Form\PaginationForm ();
+        $cityForm = new Form\CityForm ();
+        
+        if (!$cityForm->isValid ($request) || !$pageForm->isValid ($request)) {
+            return $response
+                ->withJson ([
+                    'message' => 'Wrong parameters'
+                ])
+            ;
+        }
+
         $pageSize = $this->pageSize;
         $page = intval($request->getParam('page')) ?? 0;
-
+        
         $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
         $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
-        
-        $orderBy = $request->getParam ('order-by');
+        $orderBy = $request->getParam ('order-by') ?? 'id';
         $orderDirection = $request->getParam ('order-direction') ?? 'ASC';
 
         $wheres = [
@@ -31,30 +41,13 @@ class CityController
             ['departement', 'LIKE', $county]
         ];
 
-        $citiesRequest = City::take($pageSize)
-            ->where($wheres)
-        ;
+        $cities = City::find ($wheres, [
+            'by' => $orderBy, 'direction' => $orderDirection
+        ], $page, $pageSize);
 
-        if (!empty($orderBy)) {
-            $citiesRequest = $citiesRequest
-                ->orderBy ($orderBy, $orderDirection)
-            ;
-        }
+        $count = City::count($wheres);
 
-        $cities = $citiesRequest
-            ->skip($page * $pageSize)
-            ->get()
-        ;
-
-        $count = City::where ($wheres)
-            ->count()
-        ;
-
-        if ($count > 0)
-            $pageCount = ceil($count / $pageSize);
-        else
-            $pageCount = 0;
-
+        $pageCount = ($count > 0) ? ceil($count / $pageSize) : 0;
         return $response
             ->withJson([
                 'cities' => $cities,

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Entity\City;
+use App\Model\City;
 use App\Helper\StringHelper;
 use App\Form as Form;
 

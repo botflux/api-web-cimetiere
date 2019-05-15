@@ -5,8 +5,8 @@ namespace App\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Model\City;
-use App\Helper\StringHelper;
 use App\Form as Form;
+use App\Entity\CitySearch;
 
 class CityController 
 {
@@ -29,21 +29,16 @@ class CityController
         }
 
         $pageSize = $this->pageSize;
-        $page = intval($request->getParam('page')) ?? 0;
-        
-        $name = StringHelper::surroundByPercents($request->getParam('name') ?? '');
-        $county = StringHelper::surroundByPercents($request->getParam('county') ?? '');
-        $orderBy = $request->getParam ('order-by') ?? 'id';
-        $orderDirection = $request->getParam ('order-direction') ?? 'ASC';
+        $citySearch = new CitySearch ($request);
 
         $wheres = [
-            ['nom', 'LIKE', $name],
-            ['departement', 'LIKE', $county]
+            ['nom', 'LIKE', $citySearch->getCity()],
+            ['departement', 'LIKE', $citySearch->getCounty()]
         ];
 
         $cities = City::find ($wheres, [
-            'by' => $orderBy, 'direction' => $orderDirection
-        ], $page, $pageSize);
+            'by' => $citySearch->getOrderBy(), 'direction' => $citySearch->getOrderDirection()
+        ], $citySearch->getPage(), $pageSize, $citySearch->getOr());
 
         $count = City::count($wheres);
 

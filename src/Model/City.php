@@ -38,8 +38,19 @@ class City extends Model
      * @param int $pageSize
      * @return array
      */
-    public static function find (array $wheres, array $order, $page, $pageSize) {
+    public static function find (array $wheres, array $order, $page, $pageSize, $or = false) {
         $citiesRequest = City::where($wheres);
+
+        if ($or) {
+            $citiesRequest = null;
+            foreach ($wheres as $where) {
+                if ($citiesRequest === null) {
+                    $citiesRequest = City::where($where);
+                } else {
+                    $citiesRequest = $citiesRequest->orWhere($where);
+                }
+            }
+        }
 
          if (\is_array($order) && isset($order['by']) && isset($order['direction'])) {
             $citiesRequest = $citiesRequest

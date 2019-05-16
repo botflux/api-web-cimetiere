@@ -10,10 +10,13 @@ class PaginationForm extends Form
         $this->add ([
             'name' => 'page',
             'validations' => [
-                new Validation\Number ([
-                    'from' => 0,
-                    'to' => 1000
-                ])
+                [
+                    'validate' => new Validation\Number ([
+                        'from' => 0,
+                        'to' => 1000
+                    ]),
+                    'message' => '%s must be between 0 and 1000'
+                ]
             ]
         ]);
     }

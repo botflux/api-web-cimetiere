@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class Form 
 {
     private $fields = [];
+    private $messages = [];
 
     public function __construct () {}
 
@@ -35,12 +36,25 @@ class Form
             $value = $request->getParam ($name);
 
             foreach ($field['validations'] as $v) {
-                $validationResult = $v ($value);
-
-                if (!$validationResult) return false;
+                $validationResult = $v['validate'] ($value);
+                
+                if (!$validationResult) {
+                    $this->messages[] = sprintf($v['message'], $name);
+                    return false;
+                }
             }
         }
 
         return true;
+    }
+
+    /**
+     * Returns error messages
+     *
+     * @return string[]
+     */
+    public function getMessages () : array
+    {
+        return $this->messages;
     }
 }

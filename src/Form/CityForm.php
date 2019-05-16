@@ -15,22 +15,31 @@ class CityForm extends Form
             ->add ([
                 'name' => 'county',
                 'validations' => [
-                    new Validation\Number ([
-                        'from' => 0,
-                        'to' => 1000
-                    ]),
+                    [ 
+                        'validate' => new Validation\Number ([
+                            'from' => 0,
+                            'to' => 1000
+                        ]),
+                        'message' => '%s must be a number between 0 and 1000' 
+                    ]
                 ]
             ])
             ->add ([
                 'name' => 'order-by',
                 'validations' => [
-                    new Validation\Enumeration ([ 'nom', 'departement' ]),
+                    [
+                        'validate' => new Validation\Enumeration ([ 'nom', 'departement' ]),
+                        'message' => '%s can only use values "nom" and "departement"'
+                    ]
                 ]
             ])
             ->add ([
                 'name' => 'order-direction',
                 'validations' => [
-                    new Validation\Enumeration ([ 'ASC', 'DESC' ])
+                    [
+                        'validate' => new Validation\Enumeration ([ 'ASC', 'DESC' ]),
+                        'message' => '%s can only use values "ASC" and "DESC"'
+                    ]
                 ]
             ])
         ;

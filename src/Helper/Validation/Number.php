@@ -23,6 +23,12 @@ class Number {
          * If this is a string
          */
         if (\is_string($value)) {
+
+            /** If the string is not a number */
+            if (!\is_numeric($value)) {
+                return false;
+            }
+
             /** If this is a float */
             if (\intval($value) != floatval($value)) {
                 return false;

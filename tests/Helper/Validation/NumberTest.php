@@ -45,4 +45,8 @@ class NumberTest extends \PHPUnit_Framework_TestCase
             'to' => 50
         ]);
     }
+
+    public function testReturnsFalseWhenValueIsString () {
+        $this->assertEquals((new Number())('hello'), false);
+    }
 }

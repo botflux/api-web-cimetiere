@@ -17,17 +17,6 @@ class CityController
     }
 
     public function all (Request $request, Response $response, $args) {
-        $pageForm = new Form\PaginationForm ();
-        $cityForm = new Form\CityForm ();
-        
-        if (!$cityForm->isValid ($request) || !$pageForm->isValid ($request)) {
-            return $response
-                ->withJson ([
-                    'message' => 'Wrong parameters'
-                ])
-            ;
-        }
-
         $pageSize = $this->pageSize;
         $citySearch = new CitySearch ($request);
 

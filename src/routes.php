@@ -2,6 +2,8 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Middleware\VerifyFormMiddleware;
+use App\Form as Form;
 
 // Routes
 
@@ -13,7 +15,13 @@ function getCityControllerRouterName ($function) {
     return getRouteName (\App\Controller\CityController::class, $function);
 }
 
-$app->get('/cities', getCityControllerRouterName('all'));
+$app
+    ->get('/cities', getCityControllerRouterName('all'))
+    ->add(new VerifyFormMiddleware([
+        new Form\CityForm(),
+        new Form\PaginationForm()
+    ]))
+;
 $app->get('/cities/count', getCityControllerRouterName('count'));
 
 // $app->get('/cities', function (Request $request, Response $response, array $args) {
